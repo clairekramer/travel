@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Travel Dashboard</title>
+    <meta charset="utf-8">
+    {% load staticfiles %}
+    <link rel='stylesheet' type='text/css' href='{% static 'plans/style.css' %}'>
+  </head>
+  <body>
+    <header>
+      <h1>Hello, {{ user.name }}!</h1>
+      <a href='/logout'>Logout</a>
+    </header>
+    <h3>Your Trip Schedules</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Travel Start Date</th>
+          <th>Travel End Date</th>
+          <th>Plan</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for trip in users_trips %}
+      <tr>
+        <td><a href='destination/{{ trip.id }}'>{{ trip.dest }}</a></td>
+        <td>{{ trip.start }}</td>
+        <td>{{ trip.end }}</td>
+        <td>{{ trip.desc }}</td>
+      </tr>
+      {% endfor %}
+      {% for trip in joined_trips %}
+      <tr>
+        <td><a href='destination/{{ trip.id }}'>{{ trip.dest }}</a></td>
+        <td>{{ trip.start }}</td>
+        <td>{{ trip.end }}</td>
+        <td>{{ trip.desc }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Other User's Travel Plans</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Destination</th>
+          <th>Travel Start Date</th>
+          <th>Travel End Date</th>
+          <th>Do You Want to Join?</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for trip in trips %}
+      <tr>
+        <td>{{ trip.planner.name }}
+        <td><a href='destination/{{ trip.id }}'>{{ trip.dest }}</a></td>
+        <td>{{ trip.start }}</td>
+        <td>{{ trip.end }}</td>
+        <td><a href='/travels/join/{{ trip.id }}'>Join</a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <a href='/travels/add'>Add Travel Plan</a>
+  </body>
+</html>
