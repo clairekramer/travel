@@ -9,6 +9,8 @@ class TripManager(models.Manager):
         for field, value in postData.iteritems():
             if len(value) < 1:
                 errors[field] = 'All Fields are Required'
+        if postData['start'] <= datetime.date.today().strftime('%Y-%m-%d'):
+            errors['start'] = 'Trip must start in the future'
         if postData['end'] <= postData['start']:
             errors['end'] = 'Trip must end after start date'
         if len(errors) == 0:

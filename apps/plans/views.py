@@ -4,6 +4,8 @@ from ..login.models import User
 from django.contrib.messages import error
 
 def home(request):
+    if 'user_id' not in request.session.keys():
+        return redirect('/')
     user = User.objects.get(id=request.session['user_id'])
     users_trips = user.trips.all()
     joined_trips = Trip.objects.filter(joiners=user)
@@ -11,11 +13,13 @@ def home(request):
         'user': user,
         'users_trips': users_trips,
         'joined_trips': joined_trips,
-        'trips': Trip.objects.exclude(planner=request.session['user_id'])
+        'trips': Trip.objects.exclude(joiners=request.session['user_id']).exclude(planner=request.session['user_id'])
     }
     return render(request, 'plans/index.html', context)
 
 def add(request):
+    if 'user_id' not in request.session.keys():
+        return redirect('/')
     return render(request, 'plans/add.html')
 
 def create(request):
@@ -28,6 +32,8 @@ def create(request):
         return redirect('/travels')
 
 def trip(request, trip_id):
+    if 'user_id' not in request.session.keys():
+        return redirect('/')
     trip = Trip.objects.get(id=trip_id)
     joiners = trip.joiners.all()
     context = {
